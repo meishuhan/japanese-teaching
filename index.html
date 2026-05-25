@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ZIMA的日语语法</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&family=Noto+Sans+JP:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <style>
 :root {
   --bg: #f7f5f0;
@@ -18,9 +19,7 @@
   --radius: 6px;
   --mono: 'DM Mono', monospace;
 }
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
 body {
   background: var(--bg);
   color: var(--text);
@@ -28,202 +27,108 @@ body {
   font-size: 16px;
   line-height: 1.8;
 }
-
-/* NAV */
 nav {
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  position: sticky; top: 0; z-index: 100;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
+  display: flex; align-items: center;
   justify-content: space-between;
-  padding: 0 2rem;
-  height: 56px;
+  padding: 0 2rem; height: 56px;
 }
-
-.nav-title {
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: var(--text);
-}
-
-.lang-switcher {
-  display: flex;
-  gap: 4px;
-}
-
+.nav-title { font-size: 15px; font-weight: 600; letter-spacing: 0.04em; }
+.lang-switcher { display: flex; gap: 4px; }
 .lang-btn {
-  padding: 4px 12px;
+  padding: 4px 14px;
   border: 1px solid var(--border);
   border-radius: 20px;
   background: none;
-  font-size: 13px;
-  cursor: pointer;
+  font-size: 13px; cursor: pointer;
   color: var(--muted);
   font-family: inherit;
   transition: all 0.15s;
 }
-
 .lang-btn:hover { border-color: var(--accent); color: var(--accent); }
 .lang-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
-
-/* LAYOUT */
-.wrapper {
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 3rem 2rem 6rem;
+.wrapper { max-width: 860px; margin: 0 auto; padding: 3rem 2rem 6rem; }
+#loading {
+  display: flex; align-items: center; justify-content: center;
+  padding: 4rem; color: var(--muted); font-size: 14px; gap: 10px;
 }
-
-/* HERO */
-.hero {
-  margin-bottom: 3rem;
-  padding-bottom: 2rem;
+.spinner {
+  width: 18px; height: 18px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+#content h1 {
+  font-size: clamp(24px, 4vw, 38px);
+  font-weight: 600; line-height: 1.2;
+  margin: 0 0 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--border);
+}
+#content h2 {
+  font-size: 20px; font-weight: 600;
+  margin: 2.5rem 0 1rem;
+  padding-bottom: 0.4rem;
   border-bottom: 1px solid var(--border);
 }
-
-.hero-tag {
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+#content h3 {
+  font-size: 16px; font-weight: 600;
   color: var(--accent);
-  text-transform: uppercase;
-  margin-bottom: 0.5rem;
+  margin: 1.8rem 0 0.75rem;
 }
-
-.hero h1 {
-  font-size: clamp(28px, 5vw, 44px);
-  font-weight: 600;
-  line-height: 1.2;
-  margin-bottom: 1rem;
-}
-
-.hero-quote {
-  font-size: 18px;
-  color: var(--muted);
+#content p { margin-bottom: 0.8rem; }
+#content ul, #content ol { padding-left: 1.5rem; margin-bottom: 0.8rem; }
+#content li { margin-bottom: 0.3rem; }
+#content strong { font-weight: 600; }
+#content blockquote {
   border-left: 3px solid var(--accent);
-  padding-left: 1rem;
+  padding: 0.5rem 1rem;
+  margin: 1rem 0;
+  color: var(--muted);
   font-style: italic;
+  background: var(--accent-light);
+  border-radius: 0 var(--radius) var(--radius) 0;
 }
-
-/* SECTIONS */
-section {
-  margin-bottom: 3rem;
-}
-
-h2 {
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--border);
-}
-
-h3 {
-  font-size: 16px;
-  font-weight: 600;
-  margin: 1.5rem 0 0.75rem;
-  color: var(--accent);
-}
-
-p { margin-bottom: 0.75rem; }
-
-/* CODE BLOCKS */
-.formula {
+#content hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+#content pre {
   background: var(--code-bg);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 1rem 1.25rem;
-  font-family: var(--mono);
-  font-size: 14px;
-  line-height: 1.7;
+  overflow-x: auto;
   margin: 0.75rem 0;
-  white-space: pre;
 }
-
-/* TABLES */
-.table-wrap { overflow-x: auto; margin: 1rem 0; }
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-}
-
-th {
-  background: var(--code-bg);
-  border: 1px solid var(--border);
-  padding: 8px 12px;
-  text-align: left;
-  font-weight: 500;
-  font-size: 13px;
-  color: var(--muted);
-}
-
-td {
-  border: 1px solid var(--border);
-  padding: 8px 12px;
-  vertical-align: top;
-}
-
-tr:nth-child(even) td { background: #faf8f4; }
-
-.jp { font-family: 'Noto Sans JP', sans-serif; }
-.formula-inline {
+#content code {
   font-family: var(--mono);
   font-size: 13px;
   background: var(--code-bg);
-  padding: 1px 6px;
+  padding: 1px 5px;
   border-radius: 3px;
 }
-
-/* CALLOUT */
-.callout {
-  background: var(--accent-light);
-  border-left: 3px solid var(--accent);
-  border-radius: 0 var(--radius) var(--radius) 0;
-  padding: 0.75rem 1rem;
-  margin: 1rem 0;
-  font-size: 15px;
+#content pre code { background: none; padding: 0; font-size: 13px; line-height: 1.7; }
+#content table {
+  width: 100%; border-collapse: collapse;
+  font-size: 14px; margin: 1rem 0;
+  display: block; overflow-x: auto;
 }
-
-/* GRID CARDS */
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 12px;
-  margin: 1rem 0;
-}
-
-.card {
-  background: var(--surface);
+#content th {
+  background: var(--code-bg);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1rem;
+  padding: 8px 12px; text-align: left;
+  font-weight: 500; font-size: 13px;
+  color: var(--muted); white-space: nowrap;
 }
-
-.card-num {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--accent);
-  margin-bottom: 4px;
-}
-
-.card-title { font-weight: 600; font-size: 15px; margin-bottom: 4px; }
-.card-desc { font-size: 13px; color: var(--muted); }
-
-/* LANG HIDDEN */
-.lang-content { display: none; }
-.lang-content.active { display: block; }
-
-/* FOOTER */
+#content td { border: 1px solid var(--border); padding: 8px 12px; vertical-align: top; }
+#content tr:nth-child(even) td { background: #faf8f4; }
+#content a { color: var(--accent); text-decoration: none; }
+#content a:hover { text-decoration: underline; }
 footer {
-  text-align: center;
-  font-size: 13px;
-  color: var(--muted);
-  padding: 2rem;
+  text-align: center; font-size: 13px;
+  color: var(--muted); padding: 2rem;
   border-top: 1px solid var(--border);
 }
 </style>
@@ -233,364 +138,63 @@ footer {
 <nav>
   <span class="nav-title">ZIMA — 日语语法</span>
   <div class="lang-switcher">
-    <button class="lang-btn active" onclick="setLang('zh')">中文</button>
-    <button class="lang-btn" onclick="setLang('ja')">日本語</button>
-    <button class="lang-btn" onclick="setLang('en')">English</button>
+    <button class="lang-btn active" onclick="loadLang('zh', this)">中文</button>
+    <button class="lang-btn" onclick="loadLang('ja', this)">日本語</button>
+    <button class="lang-btn" onclick="loadLang('en', this)">English</button>
   </div>
 </nav>
 
 <div class="wrapper">
-
-<!-- ═══════════════════════════════ 中文 ═══════════════════════════════ -->
-<div class="lang-content active" id="lang-zh">
-
-  <div class="hero">
-    <div class="hero-tag">日语语法速通指南</div>
-    <h1>ZIMA的日语语法</h1>
-    <p class="hero-quote">不是背语法，是套用语法。先有骨架，再填内容。</p>
-  </div>
-
-  <section>
-    <h2>这份文档适合谁？</h2>
-    <div class="card-grid">
-      <div class="card"><div class="card-num">01</div><div class="card-title">有基础词汇量</div><div class="card-desc">掌握日常基础单词即可开始</div></div>
-      <div class="card"><div class="card-num">02</div><div class="card-title">拒绝死记硬背</div><div class="card-desc">理解框架，套用语法点</div></div>
-      <div class="card"><div class="card-num">03</div><div class="card-title">目标 N2 水平</div><div class="card-desc">理解能力强可快速达到</div></div>
-      <div class="card"><div class="card-num">04</div><div class="card-title">高密度输入</div><div class="card-desc">接受大量语法一次梳理</div></div>
-    </div>
-    <div class="callout">具体使用方法将在后续更新中补充。</div>
-  </section>
-
-  <section>
-    <h2>第一部分：句子骨架</h2>
-    <p>日语核心原则：<strong>动词永远在句尾，所有修饰都在动词前。</strong></p>
-
-    <h3>通用句子骨架（最完整）</h3>
-    <div class="formula">【时间】
-＋【频率副词】
-＋【对象 / 场所 / 手段】
-＋【状态 / 样态】
-＋【动词 / 句尾】</div>
-
-    <h3>副词排序骨架</h3>
-    <div class="formula">频率 → 程度 → 状态 → 动作</div>
-    <p>口诀：<strong>越抽象越靠前，越具体越靠近动词。</strong></p>
-
-    <h3>副词类型与位置</h3>
-    <div class="table-wrap">
-      <table>
-        <tr><th>副词类型</th><th>作用</th><th>常见位置</th></tr>
-        <tr><td>频率副词</td><td>多不多</td><td>句首</td></tr>
-        <tr><td>程度副词</td><td>强不强</td><td>形容词/动词前</td></tr>
-        <tr><td>状态副词</td><td>怎么做</td><td>动词正前</td></tr>
-        <tr><td>否定副词</td><td>不</td><td>动词正前</td></tr>
-      </table>
-    </div>
-
-    <h3>整体学习顺序</h3>
-    <div class="table-wrap">
-      <table>
-        <tr><th>顺序</th><th>内容</th></tr>
-        <tr><td>1</td><td>句子骨架</td></tr>
-        <tr><td>2</td><td>词性转换</td></tr>
-        <tr><td>3</td><td>常见副词</td></tr>
-        <tr><td>4</td><td>具体语法点</td></tr>
-      </table>
-    </div>
-  </section>
-
-  <section>
-    <h2>第二部分：词性转换规则</h2>
-
-    <h3>动词 → 名词</h3>
-    <div class="table-wrap">
-      <table>
-        <tr><th>公式</th><th>含义</th><th>例子</th></tr>
-        <tr><td><span class="formula-inline">辞书形 + こと</span></td><td>抽象事实/经验</td><td class="jp">日本語を勉強することは楽しい</td></tr>
-        <tr><td><span class="formula-inline">连用形 + 方（かた）</span></td><td>方法</td><td class="jp">話し方</td></tr>
-        <tr><td><span class="formula-inline">连用形 + 中（ちゅう）</span></td><td>进行中</td><td class="jp">勉強中</td></tr>
-      </table>
-    </div>
-
-    <h3>形容词 → 副词</h3>
-    <div class="table-wrap">
-      <table>
-        <tr><th>类型</th><th>规则</th><th>例子</th></tr>
-        <tr><td>い形容词</td><td>去い + く</td><td class="jp">早い → 早く行く</td></tr>
-        <tr><td>な形容词</td><td>+ に</td><td class="jp">静かに話す</td></tr>
-      </table>
-    </div>
-
-    <h3>句子整体 → 名词</h3>
-    <div class="table-wrap">
-      <table>
-        <tr><th>公式</th><th>用法</th><th>例子</th></tr>
-        <tr><td><span class="formula-inline">普通形 + の</span></td><td>具体/口语</td><td class="jp">走るのが好き</td></tr>
-        <tr><td><span class="formula-inline">普通形 + こと</span></td><td>正式/抽象</td><td class="jp">規則を守ることが重要</td></tr>
-      </table>
-    </div>
-  </section>
-
-  <section>
-    <h2>第三部分：口语废话大全</h2>
-
-    <h3>开口不崩（停顿控制）</h3>
-    <div class="table-wrap">
-      <table>
-        <tr><th>形式</th><th>功能</th><th>中文直觉</th></tr>
-        <tr><td class="jp">えーと</td><td>思考停顿</td><td>嗯…</td></tr>
-        <tr><td class="jp">あの</td><td>轻缓起手</td><td>那个…</td></tr>
-        <tr><td class="jp">まあ</td><td>降调</td><td>怎么说呢</td></tr>
-        <tr><td class="jp">そうですね</td><td>接话</td><td>嗯，是这样</td></tr>
-      </table>
-    </div>
-    <div class="callout">会停顿的人，才有说话主导权。</div>
-
-    <h3>因果表达</h3>
-    <div class="table-wrap">
-      <table>
-        <tr><th>形式</th><th>使用感</th><th>中文</th></tr>
-        <tr><td class="jp">だから</td><td>直接因果</td><td>所以</td></tr>
-        <tr><td class="jp">そのため</td><td>理性因果</td><td>因此</td></tr>
-        <tr><td class="jp">なぜなら</td><td>解释原因</td><td>因为</td></tr>
-        <tr><td class="jp">〜から</td><td>原因</td><td>因为…</td></tr>
-        <tr><td class="jp">〜ので</td><td>柔和原因</td><td>因为…（缓）</td></tr>
-      </table>
-    </div>
-    <div class="callout">人话顺序：结论先 → だから／なぜなら → 原因</div>
-  </section>
-
-  <section>
-    <h2>第四部分：语法分类大表</h2>
-    <div class="card-grid">
-      <div class="card"><div class="card-num">A</div><div class="card-title">频率・习惯・状态</div></div>
-      <div class="card"><div class="card-num">B</div><div class="card-title">意志・计划・决定</div></div>
-      <div class="card"><div class="card-num">C</div><div class="card-title">原因・理由・结果</div></div>
-      <div class="card"><div class="card-num">D</div><div class="card-title">对比・让步・限制</div></div>
-      <div class="card"><div class="card-num">E</div><div class="card-title">推量・判断・可能性</div></div>
-      <div class="card"><div class="card-num">F</div><div class="card-title">时间顺序・阶段・变化</div></div>
-      <div class="card"><div class="card-num">G</div><div class="card-title">对象・范围・依据・手段</div></div>
-    </div>
-    <p style="color:var(--muted);font-size:14px;">每条语法均包含：中文含义 / 日文例句 / 中文解释 / 套用公式。详细内容见仓库文档。</p>
-  </section>
-
+  <div id="loading"><div class="spinner"></div>加载中…</div>
+  <div id="content" style="display:none"></div>
 </div>
 
-<!-- ═══════════════════════════════ 日本語 ═══════════════════════════════ -->
-<div class="lang-content" id="lang-ja">
-
-  <div class="hero">
-    <div class="hero-tag" style="font-family:var(--mono)">日本語文法速習ガイド</div>
-    <h1 class="jp">ZIMAの日本語文法</h1>
-    <p class="hero-quote jp">文法は暗記するものではなく、活用するもの。まず骨格を作り、そこに語彙を当てはめる。</p>
-  </div>
-
-  <section>
-    <h2 class="jp">対象読者</h2>
-    <div class="card-grid">
-      <div class="card"><div class="card-num">01</div><div class="card-title jp">基礎語彙がある</div><div class="card-desc jp">日常単語を知っていれば始められる</div></div>
-      <div class="card"><div class="card-num">02</div><div class="card-title jp">丸暗記不要</div><div class="card-desc jp">骨格を理解し、文法を当てはめる</div></div>
-      <div class="card"><div class="card-num">03</div><div class="card-title jp">目標はN2レベル</div><div class="card-desc jp">理解力が高ければ早期達成可能</div></div>
-      <div class="card"><div class="card-num">04</div><div class="card-title jp">高密度インプット</div><div class="card-desc jp">大量の文法を一度に整理</div></div>
-    </div>
-  </section>
-
-  <section>
-    <h2 class="jp">第一部：文の骨格</h2>
-    <p class="jp">日本語の核心：<strong>動詞は常に文末、すべての修飾語は動詞の前。</strong></p>
-
-    <h3 class="jp">基本文の骨格（完全版）</h3>
-    <div class="formula jp">【時間】
-＋【頻度副詞】
-＋【対象 / 場所 / 手段】
-＋【状態 / 様態】
-＋【動詞 / 文末】</div>
-
-    <h3 class="jp">副詞の順序</h3>
-    <div class="formula jp">頻度 → 程度 → 状態 → 動作</div>
-    <p class="jp">ルール：<strong>抽象的なものほど前に、具体的なものほど動詞の近くに。</strong></p>
-
-    <h3 class="jp">副詞の種類と位置</h3>
-    <div class="table-wrap">
-      <table>
-        <tr><th>副詞の種類</th><th>役割</th><th>主な位置</th></tr>
-        <tr><td class="jp">頻度副詞</td><td class="jp">頻度を表す</td><td class="jp">文頭</td></tr>
-        <tr><td class="jp">程度副詞</td><td class="jp">程度を表す</td><td class="jp">形容詞・動詞の前</td></tr>
-        <tr><td class="jp">様態副詞</td><td class="jp">様子を表す</td><td class="jp">動詞の直前</td></tr>
-        <tr><td class="jp">否定副詞</td><td class="jp">否定</td><td class="jp">動詞の直前</td></tr>
-      </table>
-    </div>
-  </section>
-
-  <section>
-    <h2 class="jp">第二部：品詞転換ルール</h2>
-
-    <h3 class="jp">動詞 → 名詞</h3>
-    <div class="table-wrap">
-      <table>
-        <tr><th>公式</th><th>意味</th><th>例</th></tr>
-        <tr><td><span class="formula-inline jp">辞書形 + こと</span></td><td class="jp">抽象的な事実・経験</td><td class="jp">日本語を勉強することは楽しい</td></tr>
-        <tr><td><span class="formula-inline jp">連用形 + 方</span></td><td class="jp">方法</td><td class="jp">話し方</td></tr>
-        <tr><td><span class="formula-inline jp">連用形 + 中</span></td><td class="jp">進行中</td><td class="jp">勉強中</td></tr>
-      </table>
-    </div>
-
-    <h3 class="jp">形容詞 → 副詞</h3>
-    <div class="table-wrap">
-      <table>
-        <tr><th>種類</th><th>ルール</th><th>例</th></tr>
-        <tr><td class="jp">い形容詞</td><td class="jp">い → く</td><td class="jp">早い → 早く行く</td></tr>
-        <tr><td class="jp">な形容詞</td><td class="jp">＋に</td><td class="jp">静かに話す</td></tr>
-      </table>
-    </div>
-  </section>
-
-  <section>
-    <h2 class="jp">第三部：口語表現集</h2>
-
-    <h3 class="jp">会話のつなぎ言葉</h3>
-    <div class="table-wrap">
-      <table>
-        <tr><th>表現</th><th>機能</th><th>感覚</th></tr>
-        <tr><td class="jp">えーと</td><td class="jp">思考の間</td><td class="jp">ん～…</td></tr>
-        <tr><td class="jp">あの</td><td class="jp">やわらかく始める</td><td class="jp">あの…</td></tr>
-        <tr><td class="jp">まあ</td><td class="jp">トーンを下げる</td><td class="jp">まあ…</td></tr>
-        <tr><td class="jp">そうですね</td><td class="jp">相づち</td><td class="jp">そうですね</td></tr>
-      </table>
-    </div>
-    <div class="callout jp">間を使いこなす人が、会話の主導権を持つ。</div>
-  </section>
-
-</div>
-
-<!-- ═══════════════════════════════ English ═══════════════════════════════ -->
-<div class="lang-content" id="lang-en">
-
-  <div class="hero">
-    <div class="hero-tag">Japanese Grammar Fast Track</div>
-    <h1>ZIMA's Japanese Grammar</h1>
-    <p class="hero-quote">Don't memorize grammar — apply it. Build the skeleton first, then fill in the words.</p>
-  </div>
-
-  <section>
-    <h2>Who is this for?</h2>
-    <div class="card-grid">
-      <div class="card"><div class="card-num">01</div><div class="card-title">Basic vocabulary</div><div class="card-desc">Know everyday words? You're ready</div></div>
-      <div class="card"><div class="card-num">02</div><div class="card-title">No rote memorization</div><div class="card-desc">Understand the framework, apply the patterns</div></div>
-      <div class="card"><div class="card-num">03</div><div class="card-title">Target: N2 level</div><div class="card-desc">Strong learners can reach it fast</div></div>
-      <div class="card"><div class="card-num">04</div><div class="card-title">High-density input</div><div class="card-desc">All grammar patterns organized at once</div></div>
-    </div>
-    <div class="callout">Detailed usage guide coming in future updates.</div>
-  </section>
-
-  <section>
-    <h2>Part 1: Sentence Skeleton</h2>
-    <p>Core principle: <strong>The verb always comes last. Everything else modifies the verb and comes before it.</strong></p>
-
-    <h3>Full sentence skeleton</h3>
-    <div class="formula jp">【Time】
-＋【Frequency adverb】
-＋【Object / Place / Means】
-＋【State / Manner】
-＋【Verb / Sentence ending】</div>
-
-    <h3>Adverb ordering</h3>
-    <div class="formula">Frequency → Degree → Manner → Action</div>
-    <p>Rule: <strong>The more abstract, the earlier it comes. The more specific, the closer to the verb.</strong></p>
-
-    <h3>Adverb types and positions</h3>
-    <div class="table-wrap">
-      <table>
-        <tr><th>Type</th><th>Function</th><th>Position</th></tr>
-        <tr><td>Frequency</td><td>How often</td><td>Sentence start</td></tr>
-        <tr><td>Degree</td><td>How much</td><td>Before adj/verb</td></tr>
-        <tr><td>Manner</td><td>How it's done</td><td>Right before verb</td></tr>
-        <tr><td>Negation</td><td>Not</td><td>Right before verb</td></tr>
-      </table>
-    </div>
-  </section>
-
-  <section>
-    <h2>Part 2: Word Class Conversions</h2>
-
-    <h3>Verb → Noun</h3>
-    <div class="table-wrap">
-      <table>
-        <tr><th>Pattern</th><th>Meaning</th><th>Example</th></tr>
-        <tr><td><span class="formula-inline jp">dictionary form + こと</span></td><td>Abstract fact / experience</td><td class="jp">日本語を勉強することは楽しい</td></tr>
-        <tr><td><span class="formula-inline jp">stem + 方</span></td><td>Method / way of doing</td><td class="jp">話し方</td></tr>
-        <tr><td><span class="formula-inline jp">stem + 中</span></td><td>In progress</td><td class="jp">勉強中</td></tr>
-      </table>
-    </div>
-
-    <h3>Adjective → Adverb</h3>
-    <div class="table-wrap">
-      <table>
-        <tr><th>Type</th><th>Rule</th><th>Example</th></tr>
-        <tr><td>い-adjective</td><td>drop い + く</td><td class="jp">早い → 早く行く</td></tr>
-        <tr><td>な-adjective</td><td>+ に</td><td class="jp">静かに話す</td></tr>
-      </table>
-    </div>
-  </section>
-
-  <section>
-    <h2>Part 3: Spoken Japanese Toolkit</h2>
-
-    <h3>Filler & pause expressions</h3>
-    <div class="table-wrap">
-      <table>
-        <tr><th>Expression</th><th>Function</th><th>Feel</th></tr>
-        <tr><td class="jp">えーと</td><td>Thinking pause</td><td>Umm…</td></tr>
-        <tr><td class="jp">あの</td><td>Soft opener</td><td>Well…</td></tr>
-        <tr><td class="jp">まあ</td><td>Tone softener</td><td>I mean…</td></tr>
-        <tr><td class="jp">そうですね</td><td>Backchanneling</td><td>I see…</td></tr>
-      </table>
-    </div>
-    <div class="callout">Those who master pausing control the conversation.</div>
-
-    <h3>Cause & effect expressions</h3>
-    <div class="table-wrap">
-      <table>
-        <tr><th>Expression</th><th>Feel</th><th>English</th></tr>
-        <tr><td class="jp">だから</td><td>Direct</td><td>So / Therefore</td></tr>
-        <tr><td class="jp">そのため</td><td>Formal</td><td>For that reason</td></tr>
-        <tr><td class="jp">なぜなら</td><td>Explanatory</td><td>Because</td></tr>
-        <tr><td class="jp">〜から</td><td>Casual</td><td>Because…</td></tr>
-        <tr><td class="jp">〜ので</td><td>Soft/polite</td><td>Since… (gentle)</td></tr>
-      </table>
-    </div>
-  </section>
-
-  <section>
-    <h2>Part 4: Grammar Pattern Index</h2>
-    <div class="card-grid">
-      <div class="card"><div class="card-num">A</div><div class="card-title">Frequency & Habits</div></div>
-      <div class="card"><div class="card-num">B</div><div class="card-title">Intent & Decisions</div></div>
-      <div class="card"><div class="card-num">C</div><div class="card-title">Cause & Result</div></div>
-      <div class="card"><div class="card-num">D</div><div class="card-title">Contrast & Concession</div></div>
-      <div class="card"><div class="card-num">E</div><div class="card-title">Inference & Possibility</div></div>
-      <div class="card"><div class="card-num">F</div><div class="card-title">Time & Change</div></div>
-      <div class="card"><div class="card-num">G</div><div class="card-title">Target, Scope & Basis</div></div>
-    </div>
-    <p style="color:var(--muted);font-size:14px;">Each pattern includes: meaning / Japanese example / explanation / usage formula. Full details in the repository.</p>
-  </section>
-
-</div>
-
-</div><!-- /wrapper -->
-
-<footer>
-  © ZIMA. All rights reserved. · <a href="https://github.com/meishuhan/japanese-teaching" style="color:var(--accent)">GitHub</a>
-</footer>
+<footer>© ZIMA. All rights reserved. · <a href="https://github.com/meishuhan/japanese-teaching" style="color:var(--accent)">GitHub</a></footer>
 
 <script>
-function setLang(lang) {
-  document.querySelectorAll('.lang-content').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.lang-btn').forEach(el => el.classList.remove('active'));
-  document.getElementById('lang-' + lang).classList.add('active');
-  event.target.classList.add('active');
+const files = {
+  zh: 'grammar-zh.md',
+  ja: 'grammar-ja.md',
+  en: 'grammar-en.md'
+};
+
+const cache = {};
+
+async function loadLang(lang, btn) {
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
   document.documentElement.lang = lang === 'ja' ? 'ja' : lang === 'en' ? 'en' : 'zh';
+
+  const loading = document.getElementById('loading');
+  const content = document.getElementById('content');
+
+  if (cache[lang]) {
+    content.innerHTML = cache[lang];
+    loading.style.display = 'none';
+    content.style.display = 'block';
+    window.scrollTo(0, 0);
+    return;
+  }
+
+  loading.style.display = 'flex';
+  content.style.display = 'none';
+
+  try {
+    const res = await fetch(files[lang]);
+    if (!res.ok) throw new Error('fetch failed ' + res.status);
+    const md = await res.text();
+    const html = marked.parse(md);
+    cache[lang] = html;
+    content.innerHTML = html;
+    loading.style.display = 'none';
+    content.style.display = 'block';
+    window.scrollTo(0, 0);
+  } catch(e) {
+    loading.innerHTML = '<span style="color:var(--accent)">加载失败：' + e.message + '</span>';
+  }
 }
+
+loadLang('zh', document.querySelector('.lang-btn'));
 </script>
 </body>
 </html>
